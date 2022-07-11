@@ -1,0 +1,27 @@
+#title {
+  display: text;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+#crd-holder {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  width: 400px;
+}
+
+#gridbox {
+  width: 25%;
+}
+
+#gridbox img {
+  width: 100px;
+}
