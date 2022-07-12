@@ -113,6 +113,9 @@ function Game() {
       }
     } else return;
     this.flips = this.flips + 1;
+    if (localStorage.getItem("hiScore" == null))
+      document.getElementById("scorebox").innerHTML =
+        `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
     document.getElementById("scorebox").innerHTML =
       `Moves Used: ${this.flips}` +
       "<br />" +
