@@ -100,8 +100,10 @@ function Game() {
             this.flips < parseInt(localStorage.getItem("hiScore")) ||
             localStorage.getItem("hiScore") == null
           )
-            localStorage.setItem("hiScore", game.flips);
-          setTimeout(() => alert("Nice job!"), 1000);
+            setTimeout(() => {
+              localStorage.setItem("hiScore", game.flips);
+              alert("Nice job!");
+            }, 1000);
         }
       } else {
         this.clickenabled = false;
