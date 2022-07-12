@@ -1,23 +1,63 @@
 #title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 72px;
 }
 #crd-holder {
+  margin: auto;
   display: flex;
   flex-wrap: wrap;
-  width: 800px;
+  width: 400px;
+  height: auto;
+  border: 2px solid black;
 }
 
-#gridbox {
-  width: 200px;
-  min-width: 200px;
-  margin: 1%;
+#scorebox {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
+  font-size: medium;
+  border: 2px solid black;
+}
+
+#btn-holder {
+  width: 100px;
+
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.card {
+  margin: auto;
+  width: 100px;
+  min-width: 100px;
   cursor: pointer;
   flex: 1;
+  object-fit: contain;
 }
 
-#gridbox img {
-  min-height: 200px;
-  min-width: 200px;
+.card img {
+  width: 100px;
+  height: 100px;
   cursor: pointer;
+  margin: auto;
   object-fit: contain;
-  margin: 0;
+}
+
+.btn {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+}
+
+.btn:hover {
+  background-color: yellow;
+  color: black;
 }
