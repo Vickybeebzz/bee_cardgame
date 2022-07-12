@@ -161,7 +161,7 @@ function Deck() {
 }
 
 let game = new Game();
-if (localStorage.getItem("hiScore") == null) {
+if (parseInt(localStorage.getItem("hiScore")) == NaN) {
   document.getElementById("scorebox").innerHTML =
     `Moves Used: ${game.flips}` + "<br />" + `Best: 0`;
   const crdholder = document.getElementById("crd-holder").innerHTML;
