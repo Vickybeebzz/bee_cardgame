@@ -8,9 +8,14 @@
 
 #gridbox {
   width: 25%;
+  min-width: 200px;
   margin: 1%;
+  cursor: pointer;
 }
 
 #gridbox img {
   width: 25%;
+  min-width: 200px;
+  cursor: pointer;
+  justify-content: center;
 }
