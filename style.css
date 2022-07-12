@@ -7,15 +7,17 @@
 }
 
 #gridbox {
-  width: 25%;
+  width: 200px;
   min-width: 200px;
   margin: 1%;
   cursor: pointer;
+  flex: 1;
 }
 
 #gridbox img {
-  width: 25%;
+  min-height: 200px;
   min-width: 200px;
   cursor: pointer;
-  justify-content: center;
+  object-fit: contain;
+  margin: 0;
 }
