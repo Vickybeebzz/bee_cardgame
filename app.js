@@ -67,7 +67,7 @@ function Game() {
     this.started = false;
     this.score = 0;
     this.flips = 0;
-    if (localStorage.getItem("hiScore" == null))
+    if (localStorage.getItem("hiScore") === null)
       document.getElementById("scorebox").innerHTML =
         `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
     else {
@@ -98,7 +98,7 @@ function Game() {
         if (this.score == 8) {
           if (
             this.flips < parseInt(localStorage.getItem("hiScore")) ||
-            localStorage.getItem("hiScore" == null)
+            localStorage.getItem("hiScore") == null
           )
             localStorage.setItem("hiScore", game.flips);
           setTimeout(() => alert("Nice job!"), 1000);
@@ -118,7 +118,7 @@ function Game() {
       }
     } else return;
     this.flips = this.flips + 1;
-    if (localStorage.getItem("hiScore" == null))
+    if (localStorage.getItem("hiScore") === null)
       document.getElementById("scorebox").innerHTML =
         `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
     else {
