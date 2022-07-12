@@ -61,6 +61,7 @@ function Game() {
       .addEventListener("click", () => game.flip(15));
 
     alert("Game Started!");
+    this.started = true;
   };
 
   this.reset = function () {
@@ -71,12 +72,10 @@ function Game() {
       `Moves Used: ${this.flips}` +
       "<br />" +
       `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
-    for (let i = 0; i <= 0; i++) {
-      this.deck.cards[i].flipped = false;
-    }
+    this.deck = new Deck();
     document.getElementById("crd-holder").innerHTML = crdholder;
-    this.clickenabled = false;
     alert("Game reset! Use START to begin a new game!");
+    this.clickenabled = true;
   };
 
   this.flip = function (id) {
@@ -92,7 +91,15 @@ function Game() {
       if (this.deck.cards[id].value == this.previouscard.value) {
         this.score = this.score + 1;
         this.previouscard = null;
-        if ((game.score = 4)) localStorage.setItem("hiScore", game.flips);
+        if (this.score == 8) {
+          if (
+            this.flips < parseInt(localStorage.getItem("hiScore")) ||
+            localStorage.getItem("hiScore" == null)
+          )
+            localStorage.setItem("hiScore", game.flips);
+          this.flips = this.flips - 1;
+          alert("Nice job!");
+        }
       } else {
         this.clickenabled = false;
         setTimeout(() => {
@@ -154,6 +161,11 @@ function Deck() {
 }
 
 let game = new Game();
+if (localStorage.getItem("hiScore") == null) {
+  document.getElementById("scorebox").innerHTML =
+    `Moves Used: ${game.flips}` + "<br />" + `Best: 0`;
+  const crdholder = document.getElementById("crd-holder").innerHTML;
+}
 document.getElementById("scorebox").innerHTML =
   `Moves Used: ${game.flips}` +
   "<br />" +
@@ -167,5 +179,4 @@ document
 document
   .getElementById("btn-reset")
   .addEventListener("click", () => game.reset());
-if ((game.score = 4)) localStorage.setItem("hiScore", game.flips);
 console.log(game.flips);
