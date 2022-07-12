@@ -95,14 +95,6 @@ function Game() {
       if (this.deck.cards[id].value == this.previouscard.value) {
         this.score = this.score + 1;
         this.previouscard = null;
-        if (this.score == 8) {
-          if (
-            this.flips < parseInt(localStorage.getItem("hiScore")) ||
-            localStorage.getItem("hiScore") == null
-          )
-            localStorage.setItem("hiScore", game.flips);
-          setTimeout(() => alert("Nice job!"), 1000);
-        }
       } else {
         this.clickenabled = false;
         setTimeout(() => {
@@ -117,15 +109,25 @@ function Game() {
         }, 1000);
       }
     } else return;
-    this.flips = this.flips + 1;
-    if (localStorage.getItem("hiScore") == null)
-      document.getElementById("scorebox").innerHTML =
-        `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
-    else {
-      document.getElementById("scorebox").innerHTML =
-        `Moves Used: ${this.flips}` +
-        "<br />" +
-        `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+    if (this.score == 8) {
+      if (
+        this.flips < parseInt(localStorage.getItem("hiScore")) ||
+        localStorage.getItem("hiScore") == null
+      )
+        this.score = this.score + 1;
+      localStorage.setItem("hiScore", game.flips);
+      setTimeout(() => alert("Nice job!"), 1000);
+    } else {
+      this.flips = this.flips + 1;
+      if (localStorage.getItem("hiScore") == null)
+        document.getElementById("scorebox").innerHTML =
+          `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
+      else {
+        document.getElementById("scorebox").innerHTML =
+          `Moves Used: ${this.flips}` +
+          "<br />" +
+          `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+      }
     }
   };
 }
