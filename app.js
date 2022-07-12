@@ -1,6 +1,9 @@
 function Game() {
   (this.started = false),
+    (this.previouscard = null),
+    (this.previouscardid = 0),
     (this.score = 0),
+    (this.flips = 0),
     (this.deck = new Deck()),
     (this.start = function () {
       if (this.started == true) return;
@@ -9,13 +12,31 @@ function Game() {
     (this.reset = function () {
       this.started = false;
       this.score = 0;
-      this.deck = new Deck();
+      for (let i = 0; i < 0; i++) {
+        this.deck.cards[i].flipped = false;
+      }
       document.getElementById("crd-holder").innerHTML = crdholder;
     }),
     (this.flip = function (id) {
-      document.getElementById("crd" + id).src = this.deck.cards[id].image;
-      this.deck.cards[id].flipped = true;
-      this.score = score + 1;
+      if (this.deck.cards[id].flipped == false && this.previouscard == null) {
+        document.getElementById("crd" + id).src = this.deck.cards[id].image;
+        this.deck.cards[id].flipped = true;
+        this.previouscard = this.deck.cards[id];
+        this.previouscardid = id;
+      } else if (this.deck.cards[id].flipped == false) {
+        document.getElementById("crd" + id).src = this.deck.cards[id].image;
+        this.deck.cards[id].flipped = true;
+        if (this.deck.cards[id].value == this.previouscard.value)
+          this.score = this.score + 1;
+        else {
+          this.deck.cards[id].flipped = false;
+          this.previouscard.flipped = false;
+          document.getElementById("crd" + id).src = "./images/cardback.png";
+          document.getElementById("crd" + this.previouscardid).src =
+            "./images/cardback.png";
+          this.previouscard = null;
+        }
+      }
     });
 }
 
@@ -61,3 +82,7 @@ let game = new Game();
 const crdholder = document.getElementById("crd-holder").innerHTML;
 game.start();
 console.log(game.deck);
+
+for (let i = 1, i<1, i++){
+  
+}
