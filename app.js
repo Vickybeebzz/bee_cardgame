@@ -60,7 +60,6 @@ function Game() {
       .getElementById("crd16")
       .addEventListener("click", () => game.flip(15));
 
-    alert("Game Started!");
     this.started = true;
   };
 
@@ -74,8 +73,8 @@ function Game() {
       `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
     this.deck = new Deck();
     document.getElementById("crd-holder").innerHTML = crdholder;
-    alert("Game reset! Use START to begin a new game!");
     this.clickenabled = true;
+    this.start();
   };
 
   this.flip = function (id) {
@@ -97,7 +96,7 @@ function Game() {
             localStorage.getItem("hiScore" == null)
           )
             localStorage.setItem("hiScore", game.flips);
-          alert("Nice job!");
+          setTimeout(() => alert("Nice job!"), 1000);
         }
       } else {
         this.clickenabled = false;
@@ -173,10 +172,7 @@ if (localStorage.getItem("hiScore") === null) {
 const crdholder = document.getElementById("crd-holder").innerHTML;
 
 console.log(game.deck);
-
-document
-  .getElementById("btn-start")
-  .addEventListener("click", () => game.start());
+game.start();
 document
   .getElementById("btn-reset")
   .addEventListener("click", () => game.reset());
