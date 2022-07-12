@@ -67,10 +67,15 @@ function Game() {
     this.started = false;
     this.score = 0;
     this.flips = 0;
-    document.getElementById("scorebox").innerHTML =
-      `Moves Used: ${this.flips}` +
-      "<br />" +
-      `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+    if (localStorage.getItem("hiScore" == null))
+      document.getElementById("scorebox").innerHTML =
+        `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
+    else {
+      document.getElementById("scorebox").innerHTML =
+        `Moves Used: ${this.flips}` +
+        "<br />" +
+        `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+    }
     this.deck = new Deck();
     document.getElementById("crd-holder").innerHTML = crdholder;
     this.clickenabled = true;
@@ -116,10 +121,12 @@ function Game() {
     if (localStorage.getItem("hiScore" == null))
       document.getElementById("scorebox").innerHTML =
         `Moves Used: ${this.flips}` + "<br />" + `Best: 0`;
-    document.getElementById("scorebox").innerHTML =
-      `Moves Used: ${this.flips}` +
-      "<br />" +
-      `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+    else {
+      document.getElementById("scorebox").innerHTML =
+        `Moves Used: ${this.flips}` +
+        "<br />" +
+        `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+    }
   };
 }
 
