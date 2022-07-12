@@ -92,7 +92,6 @@ function Game() {
         this.score = this.score + 1;
         this.previouscard = null;
         if (this.score == 8) {
-          this.flips = this.flips + 1;
           if (
             this.flips < parseInt(localStorage.getItem("hiScore")) ||
             localStorage.getItem("hiScore" == null)
