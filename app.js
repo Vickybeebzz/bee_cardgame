@@ -12,6 +12,7 @@ function Game() {
   this.reset = function () {
     this.started = false;
     this.score = 0;
+    this.flips = 0;
     for (let i = 0; i < 0; i++) {
       this.deck.cards[i].flipped = false;
     }
@@ -19,12 +20,12 @@ function Game() {
   };
   this.flip = function (id) {
     if (this.deck.cards[id].flipped == false && this.previouscard == null) {
-      document.getElementById("crd" + id).src = this.deck.cards[id].image;
+      document.getElementById("crd" + (id + 1)).src = this.deck.cards[id].image;
       this.deck.cards[id].flipped = true;
       this.previouscard = this.deck.cards[id];
-      this.previouscardid = id;
+      this.previouscardid = id + 1;
     } else if (this.deck.cards[id].flipped == false) {
-      document.getElementById("crd" + id).src = this.deck.cards[id].image;
+      document.getElementById("crd" + (id + 1)).src = this.deck.cards[id].image;
       this.deck.cards[id].flipped = true;
       if (this.deck.cards[id].value == this.previouscard.value) {
         this.score = this.score + 1;
@@ -32,12 +33,13 @@ function Game() {
       } else {
         this.deck.cards[id].flipped = false;
         this.previouscard.flipped = false;
-        document.getElementById("crd" + id).src = "./images/cardback.png";
+        document.getElementById("crd" + (id + 1)).src = "./images/cardback.png";
         document.getElementById("crd" + this.previouscardid).src =
           "./images/cardback.png";
         this.previouscard = null;
       }
     }
+    this.flips = this.flips + 1;
   };
 }
 
@@ -84,19 +86,20 @@ const crdholder = document.getElementById("crd-holder").innerHTML;
 game.start();
 console.log(game.deck);
 
-document.getElementById("crd1").addEventListener("click", () => game.flip(1));
-document.getElementById("crd2").addEventListener("click", () => game.flip(2));
-document.getElementById("crd3").addEventListener("click", () => game.flip(3));
-document.getElementById("crd4").addEventListener("click", () => game.flip(4));
-document.getElementById("crd5").addEventListener("click", () => game.flip(5));
-document.getElementById("crd6").addEventListener("click", () => game.flip(6));
-document.getElementById("crd7").addEventListener("click", () => game.flip(7));
-document.getElementById("crd8").addEventListener("click", () => game.flip(8));
-document.getElementById("crd9").addEventListener("click", () => game.flip(9));
-document.getElementById("crd10").addEventListener("click", () => game.flip(10));
-document.getElementById("crd11").addEventListener("click", () => game.flip(11));
-document.getElementById("crd12").addEventListener("click", () => game.flip(12));
-document.getElementById("crd13").addEventListener("click", () => game.flip(13));
-document.getElementById("crd14").addEventListener("click", () => game.flip(14));
-document.getElementById("crd15").addEventListener("click", () => game.flip(15));
-document.getElementById("crd16").addEventListener("click", () => game.flip(16));
+document.getElementById("crd1").addEventListener("click", () => game.flip(0));
+document.getElementById("crd2").addEventListener("click", () => game.flip(1));
+document.getElementById("crd3").addEventListener("click", () => game.flip(2));
+document.getElementById("crd4").addEventListener("click", () => game.flip(3));
+document.getElementById("crd5").addEventListener("click", () => game.flip(4));
+document.getElementById("crd6").addEventListener("click", () => game.flip(5));
+document.getElementById("crd7").addEventListener("click", () => game.flip(6));
+document.getElementById("crd8").addEventListener("click", () => game.flip(7));
+document.getElementById("crd9").addEventListener("click", () => game.flip(8));
+document.getElementById("crd10").addEventListener("click", () => game.flip(9));
+document.getElementById("crd11").addEventListener("click", () => game.flip(10));
+document.getElementById("crd12").addEventListener("click", () => game.flip(11));
+document.getElementById("crd13").addEventListener("click", () => game.flip(12));
+document.getElementById("crd14").addEventListener("click", () => game.flip(13));
+document.getElementById("crd15").addEventListener("click", () => game.flip(14));
+document.getElementById("crd16").addEventListener("click", () => game.flip(15));
+if ((game.score = 4)) localStorage.setItem("hiScore", game.score);
