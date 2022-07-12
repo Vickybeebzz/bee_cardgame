@@ -161,16 +161,18 @@ function Deck() {
 }
 
 let game = new Game();
-if (parseInt(localStorage.getItem("hiScore")) == NaN) {
+if (localStorage.getItem("hiScore") === null) {
   document.getElementById("scorebox").innerHTML =
     `Moves Used: ${game.flips}` + "<br />" + `Best: 0`;
   const crdholder = document.getElementById("crd-holder").innerHTML;
+} else {
+  document.getElementById("scorebox").innerHTML =
+    `Moves Used: ${game.flips}` +
+    "<br />" +
+    `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
 }
-document.getElementById("scorebox").innerHTML =
-  `Moves Used: ${game.flips}` +
-  "<br />" +
-  `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
 const crdholder = document.getElementById("crd-holder").innerHTML;
+
 console.log(game.deck);
 
 document
