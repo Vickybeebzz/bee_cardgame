@@ -8,21 +8,16 @@ function Game() {
   this.clickEnabled = false;
   this.deck = new Deck();
 
+  this.onStart = function () {};
+  this.onFlip = function () {};
+  this.onScoreUpdate = function () {};
+
   this.start = function () {
     if (this.started == true) return;
     this.deck.shuffle(this.deck.cards);
     this.clickEnabled = true;
-
-    for (let k = 0; k < 16; k++) {
-      document
-        .getElementById("card" + k)
-        .addEventListener("click", () => game.flip(k));
-    }
-    for (k = 0; k < 16; k++) {
-      this.setCardBack(k);
-    }
-
     this.started = true;
+    this.onStart();
   };
 
   this.reset = function () {
@@ -32,7 +27,7 @@ function Game() {
       .forEach((elem) => elem.classList.toggle("flipped"));
     this.score = 0;
     this.flips = 0;
-    updateScore();
+    this.updateScore();
     setTimeout(() => {
       this.started = false;
       this.deck = new Deck();
@@ -41,47 +36,48 @@ function Game() {
     }, 1000);
   };
 
-  this.flip = function (id) {
-    if (this.clickEnabled == false || this.deck.cards[id].flipped == true)
+  this.flip = function (cardId) {
+    const card = this.deck.cards.find((c) => c.id == cardId);
+    if (this.clickEnabled == false || this.deck.cards[cardId].flipped == true)
       return;
 
     if (this.previousCard == null) {
-      this.openFirstCard(id);
+      this.openFirstCard(cardId);
     } else {
-      this.openSecondCard(id);
+      this.openSecondCard(cardId);
     }
+
+    this.onFlip(card);
   };
-  this.toggleFlip = function (id) {
-    document.getElementById("cardi" + id).classList.toggle("flipped");
+  this.toggleFlip = function (cardId) {
+    document.getElementById("cardi" + cardId).classList.toggle("flipped");
   };
-  this.setCardBack = function (id) {
-    document.getElementById("crd" + id).src = this.deck.cards[id].image;
+  this.setCardBack = function (cardId) {
+    document.getElementById("crd" + cardId).src = this.deck.cards[cardId].image;
   };
 
-  this.openFirstCard = function (id) {
-    this.toggleFlip(id);
-    this.deck.cards[id].flipped = true;
-    this.previousCard = this.deck.cards[id];
-    this.previousCardId = id;
+  this.openFirstCard = function (cardId) {
+    this.deck.cards[cardId].flipped = true;
+    this.previousCard = this.deck.cards[cardId];
+    this.previousCardId = cardId;
     this.flips = this.flips + 1;
-    updateScore();
+    this.updateScore();
   };
 
-  this.openSecondCard = function (id) {
-    this.toggleFlip(id);
-    this.deck.cards[id].flipped = true;
+  this.openSecondCard = function (cardId) {
+    this.deck.cards[cardId].flipped = true;
     this.flips = this.flips + 1;
-    if (this.deck.cards[id].value == this.previousCard.value) {
+    if (this.deck.cards[cardId].value == this.previousCard.value) {
       this.score = this.score + 1;
       this.previousCard = null;
       if (this.score == 8) {
         this.saveBest();
-        setTimeout(updateScore, 1000);
+        setTimeout(() => this.updateScore(), 1000);
       }
     } else {
-      this.unflipCards(id);
+      this.unflipCards(cardId);
+      this.updateScore();
     }
-    updateScore();
   };
 
   this.saveBest = function () {
@@ -95,20 +91,31 @@ function Game() {
     }
   };
 
-  this.unflipCards = function (id) {
+  this.unflipCards = function (cardId) {
     this.clickEnabled = false;
     this.timeout = setTimeout(() => {
-      this.deck.cards[id].flipped = false;
+      this.deck.cards[cardId].flipped = false;
       this.previousCard.flipped = false;
-      this.toggleFlip(id);
+      this.toggleFlip(cardId);
       this.toggleFlip(this.previousCardId);
       this.previousCard = null;
       this.clickEnabled = true;
     }, 1000);
   };
+
+  this.updateScore = function () {
+    const hiScore = localStorage.getItem("hiScore");
+
+    if (hiScore == null) {
+      this.onScoreUpdate(this.flips, "0");
+    } else {
+      this.onScoreUpdate(this.flips, "0");
+    }
+  };
 }
 
-function Card(value) {
+function Card(id, value) {
+  this.id = id;
   this.value = value;
   this.flipped = false;
   this.image = "./images/card" + value + ".png";
@@ -118,7 +125,8 @@ function Deck() {
   this.cards = [];
 
   for (i = 0; i < 16; i++) {
-    this.cards[i] = new Card(Math.round((i + 1) / 2));
+    this.cards[i] = new Card(i, Math.round((i + 1) / 2));
+    this.cards[i].id = i;
   }
 
   this.shuffle = function () {
@@ -138,20 +146,34 @@ function shuffle(arr) {
   }
 }
 
-function updateScore() {
-  if (localStorage.getItem("hiScore") == null) {
-    document.getElementById("scorebox").innerHTML =
-      `Moves Used: ${game.flips}` + "<br />" + `Best: 0`;
-  } else {
-    document.getElementById("scorebox").innerHTML =
-      `Moves Used: ${game.flips}` +
-      "<br />" +
-      `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
-  }
+let game = new Game();
+
+for (let k = 0; k < 16; k++) {
+  document.getElementById("card" + k).addEventListener("click", () => {
+    const id = k;
+    game.flip(id);
+  });
 }
 
-let game = new Game();
-updateScore();
+game.onStart = () => {
+  for (k = 0; k < 16; k++) {
+    game.setCardBack(k);
+  }
+  game.updateScore();
+  console.log("Game started.");
+};
+
+game.onFlip = (card) => {
+  console.log(
+    `The card with id ${card.id} got flipped, updating UI element for it.`
+  );
+  game.toggleFlip(card.id);
+};
+
+game.onScoreUpdate = (flips, best) => {
+  document.getElementById("scorebox").innerHTML =
+    `Moves Used: ${flips}` + "<br />" + `Best: ${best}`;
+};
 
 game.start();
 document
