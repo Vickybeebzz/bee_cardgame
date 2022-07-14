@@ -155,9 +155,7 @@ let game = new Game();
 updateScore();
 const crdholder = document.getElementById("crd-holder").innerHTML;
 
-console.log(game.deck);
 game.start();
 document
   .getElementById("btn-reset")
   .addEventListener("click", () => game.reset());
-console.log(game.flips);
