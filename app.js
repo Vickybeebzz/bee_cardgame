@@ -19,7 +19,7 @@ function Game() {
         .addEventListener("click", () => game.flip(k));
     }
     for (k = 0; k < 16; k++) {
-      document.getElementById("crd" + k).src = this.deck.cards[k].image;
+      this.setCardBack(k);
     }
 
     this.started = true;
@@ -74,6 +74,9 @@ function Game() {
   };
   this.toggleFlip = function (id) {
     document.getElementById("cardi" + id).classList.toggle("flipped");
+  };
+  this.setCardBack = function (id) {
+    document.getElementById("crd" + id).src = this.deck.cards[id].image;
   };
 }
 
