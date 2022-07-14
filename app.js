@@ -2,7 +2,6 @@ function Game() {
   this.started = false;
   this.timeout = 0;
   this.previousCard = null;
-  this.previousCardId = 0;
   this.score = 0;
   this.flips = 0;
   this.clickEnabled = false;
@@ -11,6 +10,7 @@ function Game() {
   this.onStart = function () {};
   this.onFlip = function () {};
   this.onScoreUpdate = function () {};
+  this.onWrong = function() {};
 
   this.start = function () {
     if (this.started == true) return;
@@ -22,12 +22,8 @@ function Game() {
 
   this.reset = function () {
     clearTimeout(this.timeout);
-    document
-      .querySelectorAll(".flipped")
-      .forEach((elem) => elem.classList.toggle("flipped"));
     this.score = 0;
     this.flips = 0;
-    this.updateScore();
     setTimeout(() => {
       this.started = false;
       this.deck = new Deck();
@@ -49,17 +45,10 @@ function Game() {
 
     this.onFlip(card);
   };
-  this.toggleFlip = function (cardId) {
-    document.getElementById("cardi" + cardId).classList.toggle("flipped");
-  };
-  this.setCardBack = function (cardId) {
-    document.getElementById("crd" + cardId).src = this.deck.cards[cardId].image;
-  };
 
   this.openFirstCard = function (cardId) {
     this.deck.cards[cardId].flipped = true;
     this.previousCard = this.deck.cards[cardId];
-    this.previousCardId = cardId;
     this.flips = this.flips + 1;
     this.updateScore();
   };
@@ -75,7 +64,7 @@ function Game() {
         setTimeout(() => this.updateScore(), 1000);
       }
     } else {
-      this.unflipCards(cardId);
+      this.onWrong(card,this.previousCard);
       this.updateScore();
     }
   };
@@ -96,8 +85,6 @@ function Game() {
     this.timeout = setTimeout(() => {
       this.deck.cards[cardId].flipped = false;
       this.previousCard.flipped = false;
-      this.toggleFlip(cardId);
-      this.toggleFlip(this.previousCardId);
       this.previousCard = null;
       this.clickEnabled = true;
     }, 1000);
@@ -167,8 +154,14 @@ game.onFlip = (card) => {
   console.log(
     `The card with id ${card.id} got flipped, updating UI element for it.`
   );
-  game.toggleFlip(card.id);
+  document.getElementById("cardi" + card.id).classList.toggle("flipped");
+  document.getElementById("crd" + card.id).src = card.image;
 };
+
+game.onWrong() = (card, previouscard){
+  document.getElementById("cardi" + card.id).classList.toggle("flipped");
+  document.getElementById("cardi" + previouscard.id).classList.toggle("flipped");
+}
 
 game.onScoreUpdate = (flips, best) => {
   document.getElementById("scorebox").innerHTML =
