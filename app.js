@@ -43,15 +43,13 @@ function Game() {
     if (this.clickenabled == false) return;
     if (this.deck.cards[id].flipped == false && this.previouscard == null) {
       document.getElementById("crd" + (id + 1)).src = this.deck.cards[id].image;
-      document.getElementById("crdf" + (id + 1)).src =
-        this.deck.cards[id].image;
+      document.getElementById("cardi" + (id + 1)).classList.toggle("flipped");
       this.deck.cards[id].flipped = true;
       this.previouscard = this.deck.cards[id];
       this.previouscardid = id + 1;
     } else if (this.deck.cards[id].flipped == false) {
       document.getElementById("crd" + (id + 1)).src = this.deck.cards[id].image;
-      document.getElementById("crdf" + (id + 1)).src =
-        this.deck.cards[id].image;
+      document.getElementById("cardi" + (id + 1)).classList.toggle("flipped");
       this.deck.cards[id].flipped = true;
       if (this.deck.cards[id].value == this.previouscard.value) {
         this.score = this.score + 1;
@@ -76,12 +74,14 @@ function Game() {
           this.previouscard.flipped = false;
           document.getElementById("crd" + (id + 1)).src =
             "./images/cardback.png";
-          document.getElementById("crdf" + (id + 1)).src =
-            "./images/cardback.png";
+          document
+            .getElementById("cardi" + (id + 1))
+            .classList.toggle("flipped");
           document.getElementById("crd" + this.previouscardid).src =
             "./images/cardback.png";
-          document.getElementById("crdf" + this.previouscardid).src =
-            "./images/cardback.png";
+          document
+            .getElementById("cardi" + this.previouscardid)
+            .classList.toggle("flipped");
           this.previouscard = null;
           this.clickenabled = true;
         }, 1000);
