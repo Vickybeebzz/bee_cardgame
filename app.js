@@ -1,10 +1,11 @@
 function Game() {
+  this.flipEnabled = false;
   this.started = false;
   this.timeout = 0;
   this.previousCard = null;
   this.score = 0;
   this.flips = 0;
-  this.clickEnabled = false;
+
   this.deck = new Deck();
 
   this.onStart = function () {};
@@ -14,12 +15,12 @@ function Game() {
 
   this.start = function () {
     if (this.started == true) return;
-    this.deck.shuffle(this.deck.cards);
+    this.deck.shuffle();
     for (i = 0; i < this.deck.cards.length; i++) {
       this.deck.cards[i].id = i;
     }
-    this.clickEnabled = true;
     this.started = true;
+    this.flipEnabled = true;
     this.onStart();
   };
 
@@ -29,13 +30,12 @@ function Game() {
     this.flips = 0;
     this.started = false;
     this.deck = new Deck();
-    this.clickEnabled = true;
     this.start();
   };
 
   this.flip = function (cardId) {
     const card = this.deck.cards.find((c) => c.id == cardId);
-    if (this.clickEnabled == false || this.deck.cards[cardId].flipped == true)
+    if (this.flipEnabled == false || this.deck.cards[cardId].flipped == true)
       return;
 
     if (this.previousCard == null) {
@@ -55,7 +55,7 @@ function Game() {
   };
 
   this.openSecondCard = function (cardId) {
-    this.clickEnabled = false;
+    this.flipEnabled = false;
     this.deck.cards[cardId].flipped = true;
     this.flips = this.flips + 1;
     this.updateScore();
@@ -75,7 +75,8 @@ function Game() {
   this.unflipCards = function (card, previousCard) {
     card.flipped = false;
     previousCard.flipped = false;
-    this.onWrong(card, previousCard);
+    this.onFlip(card);
+    this.onFlip(previousCard);
   };
 
   this.updateScore = function () {
@@ -95,11 +96,11 @@ function Game() {
         this.saveBest();
         setTimeout(() => this.updateScore(), 1000);
       }
-      this.clickEnabled = true;
+      this.flipEnabled = true;
     } else {
       setTimeout(() => this.unflipCards(card, previousCard), 1000);
       this.previousCard = null;
-      setTimeout(() => (this.clickEnabled = true), 1000);
+      setTimeout(() => (this.flipEnabled = true), 1000);
     }
   };
 }
@@ -158,13 +159,6 @@ game.onFlip = (card) => {
   );
   document.getElementById("cardi" + card.id).classList.toggle("flipped");
   document.getElementById("crd" + card.id).src = card.image;
-};
-
-game.onWrong = (card, previousCard) => {
-  document.getElementById("cardi" + card.id).classList.toggle("flipped");
-  document
-    .getElementById("cardi" + previousCard.id)
-    .classList.toggle("flipped");
 };
 
 game.onScoreUpdate = (flips, best) => {
