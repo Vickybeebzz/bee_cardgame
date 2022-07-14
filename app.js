@@ -79,15 +79,7 @@ function Game() {
         setTimeout(updateScore, 1000);
       }
     } else {
-      this.clickEnabled = false;
-      this.timeout = setTimeout(() => {
-        this.deck.cards[id].flipped = false;
-        this.previousCard.flipped = false;
-        this.toggleFlip(id);
-        this.toggleFlip(this.previousCardId);
-        this.previousCard = null;
-        this.clickEnabled = true;
-      }, 1000);
+      this.unflipCards(id);
     }
     updateScore();
   };
@@ -95,9 +87,24 @@ function Game() {
   this.saveBest = function () {
     if (localStorage.getItem("hiScore") == null) {
       localStorage.setItem("hiScore", this.flips);
-    } else if (this.flips < parseInt(localStorage.getItem("hiScore"))) {
+      return;
+    }
+    const lowestFlipCounts = parseInt(localStorage.getItem("hiScore"));
+    if (this.flips < lowestFlipCounts) {
       localStorage.setItem("hiScore", this.flips);
     }
+  };
+
+  this.unflipCards = function (id) {
+    this.clickEnabled = false;
+    this.timeout = setTimeout(() => {
+      this.deck.cards[id].flipped = false;
+      this.previousCard.flipped = false;
+      this.toggleFlip(id);
+      this.toggleFlip(this.previousCardId);
+      this.previousCard = null;
+      this.clickEnabled = true;
+    }, 1000);
   };
 }
 
