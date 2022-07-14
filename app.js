@@ -142,7 +142,6 @@ function updateScore() {
   if (localStorage.getItem("hiScore") == null) {
     document.getElementById("scorebox").innerHTML =
       `Moves Used: ${game.flips}` + "<br />" + `Best: 0`;
-    const crdholder = document.getElementById("crd-holder").innerHTML;
   } else {
     document.getElementById("scorebox").innerHTML =
       `Moves Used: ${game.flips}` +
@@ -153,7 +152,6 @@ function updateScore() {
 
 let game = new Game();
 updateScore();
-const crdholder = document.getElementById("crd-holder").innerHTML;
 
 game.start();
 document
