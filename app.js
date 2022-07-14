@@ -30,11 +30,12 @@ function Game() {
     document
       .querySelectorAll(".flipped")
       .forEach((elem) => elem.classList.toggle("flipped"));
+    this.score = 0;
+    this.flips = 0;
+    updateScore();
     setTimeout(() => {
       this.started = false;
-      this.score = 0;
-      this.flips = 0;
-      updateScore();
+
       this.deck = new Deck();
       this.clickEnabled = true;
       this.start();
@@ -42,45 +43,56 @@ function Game() {
   };
 
   this.flip = function (id) {
-    if (this.clickEnabled == false) return;
-    if (this.deck.cards[id].flipped == false && this.previousCard == null) {
-      this.toggleFlip(id);
-      this.deck.cards[id].flipped = true;
-      this.previousCard = this.deck.cards[id];
-      this.previousCardId = id;
-    } else if (this.deck.cards[id].flipped == false) {
-      this.toggleFlip(id);
-      this.deck.cards[id].flipped = true;
-      if (this.deck.cards[id].value == this.previousCard.value) {
-        this.score = this.score + 1;
-        this.previousCard = null;
-        if (this.score == 8) {
-          if (
-            this.flips < parseInt(localStorage.getItem("hiScore")) ||
-            localStorage.getItem("hiScore") == null
-          )
-            setTimeout(updateScore, 1000);
-        }
-      } else {
-        this.clickEnabled = false;
-        this.timeout = setTimeout(() => {
-          this.deck.cards[id].flipped = false;
-          this.previousCard.flipped = false;
-          this.toggleFlip(id);
-          this.toggleFlip(this.previousCardId);
-          this.previousCard = null;
-          this.clickEnabled = true;
-        }, 1000);
-      }
-    } else return;
-    this.flips = this.flips + 1;
-    updateScore();
+    if (this.clickEnabled == false || this.deck.cards[id].flipped == true)
+      return;
+
+    if (this.previousCard == null) {
+      this.openFirstCard(id);
+    } else {
+      this.openSecondCard(id);
+    }
   };
   this.toggleFlip = function (id) {
     document.getElementById("cardi" + id).classList.toggle("flipped");
   };
   this.setCardBack = function (id) {
     document.getElementById("crd" + id).src = this.deck.cards[id].image;
+  };
+
+  this.openFirstCard = function (id) {
+    this.toggleFlip(id);
+    this.deck.cards[id].flipped = true;
+    this.previousCard = this.deck.cards[id];
+    this.previousCardId = id;
+    this.flips = this.flips + 1;
+    updateScore();
+  };
+  this.openSecondCard = function (id) {
+    this.toggleFlip(id);
+    this.deck.cards[id].flipped = true;
+    if (this.deck.cards[id].value == this.previousCard.value) {
+      this.score = this.score + 1;
+      this.previousCard = null;
+      if (this.score == 8) {
+        if (
+          this.flips < parseInt(localStorage.getItem("hiScore")) ||
+          localStorage.getItem("hiScore") == null
+        )
+          setTimeout(updateScore, 1000);
+      }
+    } else {
+      this.clickEnabled = false;
+      this.timeout = setTimeout(() => {
+        this.deck.cards[id].flipped = false;
+        this.previousCard.flipped = false;
+        this.toggleFlip(id);
+        this.toggleFlip(this.previousCardId);
+        this.previousCard = null;
+        this.clickEnabled = true;
+      }, 1000);
+    }
+    this.flips = this.flips + 1;
+    updateScore();
   };
 }
 
