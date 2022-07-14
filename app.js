@@ -98,8 +98,6 @@ function Game() {
     } else if (this.flips < parseInt(localStorage.getItem("hiScore"))) {
       localStorage.setItem("hiScore", this.flips);
     }
-
-    this.unflipCards = function () {};
   };
 }
 
