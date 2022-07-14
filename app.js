@@ -27,9 +27,9 @@ function Game() {
 
   this.reset = function () {
     clearTimeout(this.timeout);
-    while (document.querySelector(".flipped") != null) {
-      document.querySelector(".flipped").classList.toggle("flipped");
-    }
+    document
+      .querySelectorAll(".flipped")
+      .forEach((elem) => elem.classList.toggle("flipped"));
     setTimeout(() => {
       this.started = false;
       this.score = 0;
