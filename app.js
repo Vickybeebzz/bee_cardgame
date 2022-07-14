@@ -84,7 +84,7 @@ function Game() {
     if (hiScore == null) {
       this.onScoreUpdate(this.flips, "0");
     } else {
-      this.onScoreUpdate(this.flips, "0");
+      this.onScoreUpdate(this.flips, hiScore);
     }
   };
   this.checkCards = function (card, previousCard) {
