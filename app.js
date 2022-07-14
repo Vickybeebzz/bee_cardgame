@@ -10,7 +10,7 @@ function Game() {
 
   this.start = function () {
     if (this.started == true) return;
-    shuffle(this.deck.cards);
+    this.deck.shuffle(this.deck.cards);
     this.clickEnabled = true;
 
     for (let k = 0; k < 16; k++) {
@@ -27,16 +27,18 @@ function Game() {
 
   this.reset = function () {
     clearTimeout(this.timeout);
-    this.started = false;
-    this.score = 0;
-    this.flips = 0;
-    updateScore();
-    this.deck = new Deck();
-    for(i=0;i<16;i++){
-      
+    while (document.querySelector(".flipped") != null) {
+      document.querySelector(".flipped").classList.toggle("flipped");
     }
-    this.clickEnabled = true;
-    this.start();
+    setTimeout(() => {
+      this.started = false;
+      this.score = 0;
+      this.flips = 0;
+      updateScore();
+      this.deck = new Deck();
+      this.clickEnabled = true;
+      this.start();
+    }, 1000);
   };
 
   this.flip = function (id) {
@@ -95,9 +97,9 @@ function Deck() {
     this.cards[i] = new Card(Math.round((i + 1) / 2));
   }
 
-  this.shuffle(){
+  this.shuffle = function () {
     shuffle(this.cards);
-  }
+  };
 }
 
 function shuffle(arr) {
