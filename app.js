@@ -176,4 +176,3 @@ game.start();
 document
   .getElementById("btn-reset")
   .addEventListener("click", () => game.reset());
-console.log(game.deck);
