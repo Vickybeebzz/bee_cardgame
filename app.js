@@ -1,39 +1,40 @@
-function Game() {
-  this.flipEnabled = false;
-  this.started = false;
-  this.timeout = 0;
-  this.previousCard = null;
-  this.score = 0;
-  this.flips = 0;
+class Game {
+  constructor() {
+    this.flipEnabled = false;
+    this.started = false;
+    this.timeout = 0;
+    this.previousCard = null;
+    this.score = 0;
+    this.flips = 0;
+    this.deck = new Deck();
+  }
 
-  this.deck = new Deck();
+  onStart() {}
+  onFlip() {}
+  onScoreUpdate() {}
+  onWrong() {}
 
-  this.onStart = function () {};
-  this.onFlip = function () {};
-  this.onScoreUpdate = function () {};
-  this.onWrong = function () {};
-
-  this.start = function () {
+  start() {
     if (this.started == true) return;
     this.deck.shuffle();
-    for (i = 0; i < this.deck.cards.length; i++) {
+    for (let i = 0; i < this.deck.cards.length; i++) {
       this.deck.cards[i].id = i;
     }
     this.started = true;
     this.flipEnabled = true;
     this.onStart();
-  };
+  }
 
-  this.reset = function () {
+  reset() {
     clearTimeout(this.timeout);
     this.score = 0;
     this.flips = 0;
     this.started = false;
     this.deck = new Deck();
     this.start();
-  };
+  }
 
-  this.flip = function (cardId) {
+  flip(cardId) {
     const card = this.deck.cards.find((c) => c.id == cardId);
     if (this.flipEnabled == false || this.deck.cards[cardId].flipped == true)
       return;
@@ -45,23 +46,23 @@ function Game() {
       this.checkCards(card, this.previousCard);
     }
     this.onFlip(card);
-  };
+  }
 
-  this.openFirstCard = function (cardId) {
+  openFirstCard(cardId) {
     this.deck.cards[cardId].flipped = true;
     this.previousCard = this.deck.cards[cardId];
     this.flips = this.flips + 1;
     this.updateScore();
-  };
+  }
 
-  this.openSecondCard = function (cardId) {
+  openSecondCard(cardId) {
     this.flipEnabled = false;
     this.deck.cards[cardId].flipped = true;
     this.flips = this.flips + 1;
     this.updateScore();
-  };
+  }
 
-  this.saveBest = function () {
+  saveBest() {
     if (localStorage.getItem("hiScore") == null) {
       localStorage.setItem("hiScore", this.flips);
       return;
@@ -70,16 +71,16 @@ function Game() {
     if (this.flips < lowestFlipCounts) {
       localStorage.setItem("hiScore", this.flips);
     }
-  };
+  }
 
-  this.unflipCards = function (card, previousCard) {
+  unflipCards(card, previousCard) {
     card.flipped = false;
     previousCard.flipped = false;
     this.onFlip(card);
     this.onFlip(previousCard);
-  };
+  }
 
-  this.updateScore = function () {
+  updateScore() {
     const hiScore = localStorage.getItem("hiScore");
 
     if (hiScore == null) {
@@ -87,8 +88,8 @@ function Game() {
     } else {
       this.onScoreUpdate(this.flips, hiScore);
     }
-  };
-  this.checkCards = function (card, previousCard) {
+  }
+  checkCards(card, previousCard) {
     if (card.value == previousCard.value) {
       this.score = this.score + 1;
       this.previousCard = null;
@@ -102,25 +103,29 @@ function Game() {
       this.previousCard = null;
       setTimeout(() => (this.flipEnabled = true), 1000);
     }
-  };
+  }
 }
 
-function Card(id, value) {
-  this.id = id;
-  this.value = value;
-  this.flipped = false;
-  this.image = "./images/card" + value + ".png";
+class Card {
+  constructor(id, value) {
+    this.id = id;
+    this.value = value;
+    this.flipped = false;
+    this.image = "./images/card" + value + ".png";
+  }
 }
 
-function Deck() {
-  this.cards = [];
+class Deck {
+  constructor() {
+    this.cards = [];
 
-  for (i = 0; i < 16; i++) {
-    this.cards[i] = new Card(i, Math.round((i + 1) / 2));
-    this.cards[i].id = i;
+    for (let i = 0; i < 16; i++) {
+      this.cards[i] = new Card(i, Math.round((i + 1) / 2));
+      this.cards[i].id = i;
+    }
   }
 
-  this.shuffle = function () {
+  shuffle = function () {
     shuffle(this.cards);
   };
 }
