@@ -160,10 +160,10 @@ game.onFlip = (card) => {
   document.getElementById("crd" + card.id).src = card.image;
 };
 
-game.onWrong = (card, previouscard) => {
+game.onWrong = (card, previousCard) => {
   document.getElementById("cardi" + card.id).classList.toggle("flipped");
   document
-    .getElementById("cardi" + previouscard.id)
+    .getElementById("cardi" + previousCard.id)
     .classList.toggle("flipped");
 };
 
