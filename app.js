@@ -68,7 +68,6 @@ function Game() {
                 "<br />" +
                 `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
             }, 1000);
-          alert("Nice job!");
         }
       } else {
         this.clickenabled = false;
