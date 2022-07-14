@@ -32,7 +32,9 @@ function Game() {
     this.flips = 0;
     updateScore();
     this.deck = new Deck();
-    document.getElementById("crd-holder").innerHTML = crdholder;
+    for(i=0;i<16;i++){
+      
+    }
     this.clickEnabled = true;
     this.start();
   };
@@ -92,17 +94,21 @@ function Deck() {
   for (i = 0; i < 16; i++) {
     this.cards[i] = new Card(Math.round((i + 1) / 2));
   }
+
+  this.shuffle(){
+    shuffle(this.cards);
+  }
 }
 
-function shuffle(cards) {
+function shuffle(arr) {
   let j = 0;
   let temp;
 
-  for (let i = cards.length - 1; i > 0; i--) {
+  for (let i = arr.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1));
-    temp = cards[i];
-    cards[i] = cards[j];
-    cards[j] = temp;
+    temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
   }
 }
 
