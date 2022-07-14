@@ -11,11 +11,54 @@ function Game() {
     if (this.started == true) return;
     this.deck.shuffle();
     this.clickenabled = true;
-    for (let k = 0; k < 16; k++) {
-      document
-        .getElementById("card" + (k + 1))
-        .addEventListener("click", () => game.flip(k));
-    }
+    document
+      .getElementById("card1")
+      .addEventListener("click", () => game.flip(0));
+    document
+      .getElementById("card2")
+      .addEventListener("click", () => game.flip(1));
+    document
+      .getElementById("card3")
+      .addEventListener("click", () => game.flip(2));
+    document
+      .getElementById("card4")
+      .addEventListener("click", () => game.flip(3));
+    document
+      .getElementById("card5")
+      .addEventListener("click", () => game.flip(4));
+    document
+      .getElementById("card6")
+      .addEventListener("click", () => game.flip(5));
+    document
+      .getElementById("card7")
+      .addEventListener("click", () => game.flip(6));
+    document
+      .getElementById("card8")
+      .addEventListener("click", () => game.flip(7));
+    document
+      .getElementById("card9")
+      .addEventListener("click", () => game.flip(8));
+    document
+      .getElementById("card10")
+      .addEventListener("click", () => game.flip(9));
+    document
+      .getElementById("card11")
+      .addEventListener("click", () => game.flip(10));
+    document
+      .getElementById("card12")
+      .addEventListener("click", () => game.flip(11));
+    document
+      .getElementById("card13")
+      .addEventListener("click", () => game.flip(12));
+    document
+      .getElementById("card14")
+      .addEventListener("click", () => game.flip(13));
+    document
+      .getElementById("card15")
+      .addEventListener("click", () => game.flip(14));
+    document
+      .getElementById("card16")
+      .addEventListener("click", () => game.flip(15));
 
     this.started = true;
   };
@@ -43,15 +86,11 @@ function Game() {
     if (this.clickenabled == false) return;
     if (this.deck.cards[id].flipped == false && this.previouscard == null) {
       document.getElementById("crd" + (id + 1)).src = this.deck.cards[id].image;
-      document.getElementById("crdf" + (id + 1)).src =
-        this.deck.cards[id].image;
       this.deck.cards[id].flipped = true;
       this.previouscard = this.deck.cards[id];
       this.previouscardid = id + 1;
     } else if (this.deck.cards[id].flipped == false) {
       document.getElementById("crd" + (id + 1)).src = this.deck.cards[id].image;
-      document.getElementById("crdf" + (id + 1)).src =
-        this.deck.cards[id].image;
       this.deck.cards[id].flipped = true;
       if (this.deck.cards[id].value == this.previouscard.value) {
         this.score = this.score + 1;
@@ -67,8 +106,8 @@ function Game() {
                 `Moves Used: ${this.flips}` +
                 "<br />" +
                 `Best: ${parseInt(localStorage.getItem("hiScore"))}`;
+              alert("Nice job!");
             }, 1000);
-          alert("Nice job!");
         }
       } else {
         this.clickenabled = false;
@@ -77,11 +116,7 @@ function Game() {
           this.previouscard.flipped = false;
           document.getElementById("crd" + (id + 1)).src =
             "./images/cardback.png";
-          document.getElementById("crdf" + (id + 1)).src =
-            "./images/cardback.png";
           document.getElementById("crd" + this.previouscardid).src =
-            "./images/cardback.png";
-          document.getElementById("crdf" + this.previouscardid).src =
             "./images/cardback.png";
           this.previouscard = null;
           this.clickenabled = true;
