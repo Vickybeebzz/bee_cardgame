@@ -10,11 +10,14 @@ function Game() {
   this.onStart = function () {};
   this.onFlip = function () {};
   this.onScoreUpdate = function () {};
-  this.onWrong = function() {};
+  this.onWrong = function () {};
 
   this.start = function () {
     if (this.started == true) return;
     this.deck.shuffle(this.deck.cards);
+    for (i = 0; i < this.deck.cards.length; i++) {
+      this.deck.cards[i].id = i;
+    }
     this.clickEnabled = true;
     this.started = true;
     this.onStart();
@@ -24,12 +27,10 @@ function Game() {
     clearTimeout(this.timeout);
     this.score = 0;
     this.flips = 0;
-    setTimeout(() => {
-      this.started = false;
-      this.deck = new Deck();
-      this.clickEnabled = true;
-      this.start();
-    }, 1000);
+    this.started = false;
+    this.deck = new Deck();
+    this.clickEnabled = true;
+    this.start();
   };
 
   this.flip = function (cardId) {
@@ -41,8 +42,8 @@ function Game() {
       this.openFirstCard(cardId);
     } else {
       this.openSecondCard(cardId);
+      this.checkCards(card, this.previousCard);
     }
-
     this.onFlip(card);
   };
 
@@ -54,19 +55,10 @@ function Game() {
   };
 
   this.openSecondCard = function (cardId) {
+    this.clickEnabled = false;
     this.deck.cards[cardId].flipped = true;
     this.flips = this.flips + 1;
-    if (this.deck.cards[cardId].value == this.previousCard.value) {
-      this.score = this.score + 1;
-      this.previousCard = null;
-      if (this.score == 8) {
-        this.saveBest();
-        setTimeout(() => this.updateScore(), 1000);
-      }
-    } else {
-      this.onWrong(card,this.previousCard);
-      this.updateScore();
-    }
+    this.updateScore();
   };
 
   this.saveBest = function () {
@@ -80,14 +72,10 @@ function Game() {
     }
   };
 
-  this.unflipCards = function (cardId) {
-    this.clickEnabled = false;
-    this.timeout = setTimeout(() => {
-      this.deck.cards[cardId].flipped = false;
-      this.previousCard.flipped = false;
-      this.previousCard = null;
-      this.clickEnabled = true;
-    }, 1000);
+  this.unflipCards = function (card, previousCard) {
+    card.flipped = false;
+    previousCard.flipped = false;
+    this.onWrong(card, previousCard);
   };
 
   this.updateScore = function () {
@@ -97,6 +85,21 @@ function Game() {
       this.onScoreUpdate(this.flips, "0");
     } else {
       this.onScoreUpdate(this.flips, "0");
+    }
+  };
+  this.checkCards = function (card, previousCard) {
+    if (card.value == previousCard.value) {
+      this.score = this.score + 1;
+      this.previousCard = null;
+      if (this.score == 8) {
+        this.saveBest();
+        setTimeout(() => this.updateScore(), 1000);
+      }
+      this.clickEnabled = true;
+    } else {
+      setTimeout(() => this.unflipCards(card, previousCard), 1000);
+      this.previousCard = null;
+      setTimeout(() => (this.clickEnabled = true), 1000);
     }
   };
 }
@@ -137,16 +140,15 @@ let game = new Game();
 
 for (let k = 0; k < 16; k++) {
   document.getElementById("card" + k).addEventListener("click", () => {
-    const id = k;
-    game.flip(id);
+    game.flip(k);
   });
 }
 
 game.onStart = () => {
-  for (k = 0; k < 16; k++) {
-    game.setCardBack(k);
-  }
   game.updateScore();
+  document
+    .querySelectorAll(".flipped")
+    .forEach((elem) => elem.classList.toggle("flipped"));
   console.log("Game started.");
 };
 
@@ -158,10 +160,12 @@ game.onFlip = (card) => {
   document.getElementById("crd" + card.id).src = card.image;
 };
 
-game.onWrong() = (card, previouscard){
+game.onWrong = (card, previouscard) => {
   document.getElementById("cardi" + card.id).classList.toggle("flipped");
-  document.getElementById("cardi" + previouscard.id).classList.toggle("flipped");
-}
+  document
+    .getElementById("cardi" + previouscard.id)
+    .classList.toggle("flipped");
+};
 
 game.onScoreUpdate = (flips, best) => {
   document.getElementById("scorebox").innerHTML =
@@ -172,3 +176,4 @@ game.start();
 document
   .getElementById("btn-reset")
   .addEventListener("click", () => game.reset());
+console.log(game.deck);
