@@ -35,7 +35,6 @@ function Game() {
     updateScore();
     setTimeout(() => {
       this.started = false;
-
       this.deck = new Deck();
       this.clickEnabled = true;
       this.start();
@@ -67,18 +66,17 @@ function Game() {
     this.flips = this.flips + 1;
     updateScore();
   };
+
   this.openSecondCard = function (id) {
     this.toggleFlip(id);
     this.deck.cards[id].flipped = true;
+    this.flips = this.flips + 1;
     if (this.deck.cards[id].value == this.previousCard.value) {
       this.score = this.score + 1;
       this.previousCard = null;
       if (this.score == 8) {
-        if (
-          this.flips < parseInt(localStorage.getItem("hiScore")) ||
-          localStorage.getItem("hiScore") == null
-        )
-          setTimeout(updateScore, 1000);
+        this.saveBest();
+        setTimeout(updateScore, 1000);
       }
     } else {
       this.clickEnabled = false;
@@ -91,8 +89,17 @@ function Game() {
         this.clickEnabled = true;
       }, 1000);
     }
-    this.flips = this.flips + 1;
     updateScore();
+  };
+
+  this.saveBest = function () {
+    if (localStorage.getItem("hiScore") == null) {
+      localStorage.setItem("hiScore", this.flips);
+    } else if (this.flips < parseInt(localStorage.getItem("hiScore"))) {
+      localStorage.setItem("hiScore", this.flips);
+    }
+
+    this.unflipCards = function () {};
   };
 }
 
